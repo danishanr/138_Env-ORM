@@ -21,7 +21,16 @@ db.sequelize.sync()
         console.log(err);
     })
 
-app.post("/komik", async (req,res) => {
+app.get('/komik', async (req,res) => {
+    try {
+        const komik = await db.Komik.findAll();
+        res.send(komik);
+    } catch (err) {
+        res.send(err);
+    }
+});    
+
+app.post('/komik', async (req,res) => {
     const data = req.body;
     try {
         const komik = await db.Komik.create(data);
@@ -36,7 +45,7 @@ app.put('/komik/:id', async (req, res) => {
     const data = req.body;
 
     try {
-        const komik = await db.Komik.findyByPk(id);
+        const komik = await db.Komik.findByPk(id);
         if (!komik) {
             return res.status(404).send({ message: 'Komik tidak ditemukan' });
         }
@@ -50,7 +59,7 @@ app.put('/komik/:id', async (req, res) => {
 app.delete('/komik/:id', async (req, res) => {
     const id = req.params.id;
     try {
-        const komik = await db.Komik.findyByPk(id);
+        const komik = await db.Komik.findByPk(id);
         if (!komik) {
             return res.status(404).send({ message: 'Komik tidak ditemukan'});
         }
