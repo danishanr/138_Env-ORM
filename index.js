@@ -1,9 +1,10 @@
-const express = require('express')
+const express = require('express');
 const app = express();
 const PORT = 3000;
-const db = require('./modles');
+const db = require('./models');
+app.use(express.json());
 app.use(express.urlencoded({
-    extended: true
+    extended: false
 }));
 
 app.listen(PORT, () => {
@@ -11,13 +12,14 @@ app.listen(PORT, () => {
 })
 
 db.sequelize.sync()
-    .then(result) => {
+    .then((result) => {
         app.listen(3000, () => {
             console.log('Server started');
         })
     })
-    .catch(err) => {
+    .catch((err) => {
         console.log(err);
-    }   
+    })
 
-    
+app.post("/komik", async (req, res) => {
+    const data = req.body;
